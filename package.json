@@ -1,0 +1,20 @@
+{
+  "name": "talk",
+  "private": true,
+  "scripts": {
+    "build": "slidev build",
+    "dev": "slidev --open",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "0.48.0-beta.12",
+    "@slidev/theme-default": "^0.25.0",
+    "@slidev/theme-seriph": "^0.25.0",
+    "@vueuse/integrations": "^10.8.0",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "@iconify-json/logos": "^1.1.42",
+    "@iconify-json/mdi": "^1.1.64"
+  }
+}
