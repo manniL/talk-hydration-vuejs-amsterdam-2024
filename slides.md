@@ -10,6 +10,8 @@ layout: intro
 transition: fade
 ---
 
+---
+
 <img src="/hydration/cryptic-error.png">
 
 ---
@@ -175,23 +177,62 @@ heading: About me
 
 ---
 layout: intro
-preload: false
-clicks: 1
 ---
 
-<h1 class="mt-12 flex justify-center items-center">
+# Do you use SSR?
 
-<logos-vue v-motion class="text-8xl" :initial="{ x: -500 }" :enter="{ x: 0, transition: { duration: 500 } }"/>
-<mdi-heart v-if="$slidev.nav.clicks === 0" class="text-8xl invisible"/>
-<mdi-heart v-if="$slidev.nav.clicks === 1" v-motion :initial="{ x: 500 }" :enter="{ x: 0, transition: { duration: 500 } }" class="text-red-500 text-8xl" />
+<VClicks>
 
-</h1>
+## If not, you never bother with hydration errors
+
+</VClicks>
 
 ---
 layout: intro
 ---
 
-# Do you use SSR?
+# What is Hydration?
+
+<!-- 
+ Why are JavaScript developers so thirsty? 
+-->
+
+---
+
+<HydrationStepOne class="h-90 w-full" />
+
+---
+
+<HydrationStepTwo class="h-90 w-full" />
+
+---
+
+<HydrationStepThree class="h-90 w-full" />
+
+---
+
+<HydrationStepFour class="h-90 w-full" />
+
+---
+
+<HydrationStepFive class="h-90 w-full" />
+
+---
+
+<HydrationStepSix class="h-90 w-full" />
+
+---
+
+<HydrationStepSeven class="h-90 w-full" />
+
+---
+
+<HydrationStepEight class="h-90 w-full" />
+
+---
+
+<HydrationStepNine class="h-90 w-full" />
+
 
 ---
 
@@ -206,16 +247,22 @@ TODO FROM HERE
   * Authentication state
 
 * Can we avoid hydration?
-  * First of all, we can delay it 
+  * No JavaScript
+  * Infer data from markup
+    * Won't work for complex scenarios
+  * First of all, we can delay it (progressive/lazy hydration)
+    * But does this always help? 
+    * Faster initial load but almost guaranteed waiting time on click
+  * Ideally, we also only decide what to hydrate (partial hydration)
   * Island Architecture (e.g. with Astro) to only hydrate what needs to be interactive
     * Especially good with static, content-heavy sites
-  * Nuxt Server Components -> Julien's talk later <on></on>
+  * Nuxt Server Components -> Julien's talk later
 
 * Vue 3.4 improved hydration messages + option to check them also in production
 * vue-bind-once (https://github.com/danielroe/vue-bind-once)
 * Upcoming: Vue-based useId composable planned for v3.5 (https://twitter.com/youyuxi/status/1745379112456429688)
 * Upcoming: Mismatched hook (https://github.com/vuejs/core/pull/8389)
-* And more to come in future Vue versions
+* And more to come in future Vue (and also Nuxt) versions
 
 What to recommend:
 
