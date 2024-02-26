@@ -236,6 +236,34 @@ layout: intro
 
 ---
 
+# Serializing State from Server to Client
+
+`example.com/_payload.json`
+
+```json
+[
+  { "data": 1, "prerenderedAt": 209 },
+  ["Reactive", 2],
+  {
+    "latest-articles": 3,
+    "latest-speaking": 74,
+    "latest-workshops": 166
+  },
+  [4, 26, 43, 58],
+  {
+    "_path": 5,
+    "_dir": 6,
+    "_draft": 7,
+    "_partial": 7,
+    "_locale": 8,
+    "title": 9,
+  },
+  1708189751754
+]
+```
+
+---
+
 TODO FROM HERE
 
 * What is hydration?
