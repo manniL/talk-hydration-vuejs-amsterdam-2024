@@ -12,28 +12,34 @@ transition: fade
 
 ---
 
-<img src="/hydration/cryptic-error.png">
+<div class="h-full flex justify-center items-center">
+  <img class="my-auto" src="/hydration/cryptic-error.png">
+</div>
 
 ---
 layout: intro
 preload: false
 transition: false
 ---
-
-<img v-motion :initial="{ scale: 1, x: 0 }" :enter="{ scale: 3, x: 750, transition: { duration: 500 } }" src="/hydration/cryptic-error.png">
-
-
----
-layout: intro
----
-
-<img src="/hydration/warning-dev.png">
+<div class="h-full flex justify-center items-center">
+  <img v-motion :initial="{ scale: 1, x: 0, y:102 }" :enter="{ scale: 3, x: 750, transition: { duration: 500, delay: 500 } }" src="/hydration/cryptic-error.png">
+</div>
 
 ---
 layout: intro
 ---
+<div class="h-full flex justify-center items-center">
+  <img class="mx-auto" src="/hydration/warning-dev.png">
+</div>
 
-<img v-motion :initial="{ scale: 1, x: 0 }" :enter="{ scale: 3, x: 750, transition: { duration: 500 } }" src="/hydration/warning-dev.png">
+---
+layout: intro
+preload: false
+---
+
+<div class="h-full flex justify-center items-center">
+  <img class="mx-auto" v-motion :initial="{ scale: 1, x: 0 }" :enter="{ scale: 3, x: 750, transition: { duration: 500 } }" src="/hydration/warning-dev.png">
+</div>
 
 ---
 preload: false
@@ -329,7 +335,7 @@ const value = ref(Math.random())
 ```
 ```ts
 // In the script part of a Vue component (Nuxt app)
-const value = useState('unique-key', Math.random())
+const value = useState('unique-key', () => Math.random())
 ```
 ````
 
@@ -416,8 +422,8 @@ layout: intro
 <VClicks depth="2">
 
 * Yes - by not including JavaScript at all!
-  * e.g. via `experimentalNoScripts` route rule in Nuxt
-  * Problem: No interactivity 😫. If JS is needed, you need to write it vanilla.
+  * e.g. via `noScripts` feature flag or route rule in Nuxt
+  * Problem: No interactivity 😫. If JS is needed, you need to write vanilla
 * You could try inferring data from markup (not easily possible)
   * This won't work for complex scenarios though
 * But you can two things: Decide **what** should be hydrated and **when**!
@@ -448,7 +454,7 @@ layout: intro
   * e.g. on scroll, on click or on browser idle
 * This improves the initial load time
 * If not being careful, this can lead to a waiting time on click though (bad _INP_)
-* Can be done via Harlan's `nuxt-delay-hydration` module
+* Can be achieved via Harlan's `nuxt-delay-hydration` module
 
 </VClicks>
 
@@ -479,20 +485,31 @@ layout: intro
 
 ---
 layout: intro
+preload: false
 ---
 
-# What's next in terms of hydration and Vue.js?
+# Nuxt Server Components - "Reversed Islands"
+
+## Watch Julien Huang's talk later
+
+<img v-motion width="256" height="256" class="absolute" :initial="{ y: 500, x: 300 }" :enter="{ y: 10, transition: { duration: 1000 } }" src="/julien-sticker.png" />
+
+---
+layout: intro
+---
+
+# What's next in terms of Hydration and Vue.js?
 
 ---
 
-# What's next in terms of hydration and Vue.js?
+# What's next in terms of Hydration and Vue.js?
 
-<VClicks>
+<VClicks depth="2">
 
 * `useId` composable in Vue 3.5
   * Already available in Nuxt to fill the gap
   * Why? To provide unique ids, e.g. for accessibility attributes like `aria-labelledby`
-* A hook to react when mismatches happen (https://github.com/vuejs/core/pull/8389)
+* A [hook] (https://github.com/vuejs/core/pull/8389) to react when mismatches happen
 * More improvements with regards to lazy hydration, ssr-only etc. etc. in future Vue versions possible
 * Let's see what Vapor Mode will bring 👀
 
@@ -500,7 +517,9 @@ layout: intro
 
 ---
 
-# Recommendations for a better hydration experience with Vue + Nuxt
+# Recommendations
+
+For a better hydration experience with Vue + Nuxt
 
 <VClicks>
 
@@ -593,17 +612,18 @@ layout: intro
 
 ---
 layout: intro
+preload: false
 ---
 
 # <span class="water-font water-font-first">Hydration Demystified</span><span class="water-font water-font-second" aria-hidden>Hydration Demystified</span>
 
-# <mdi-check class="text-green-500 mt-32" />
+<img v-motion class="mt-14" :initial="{ y: 500 }" :enter="{ y:0, transition: { duration: 1000 } }" src="/happy.png" />
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
   h1 {
-    @apply relative w-full !text-7xl !mt-0 !mb-0;
+    @apply relative w-full !text-7xl !mb-0;
   }
 
   h2 {
@@ -702,9 +722,9 @@ layout: intro
 
 ## March 2024
 
-# `https://dejavue.fm` 
+<Qrcode url="https://dejavue.fm?ref=vueams-24" class="mt-8 mx-auto" />
 
-<Qrcode url="https://dejavue.fm" class="mt-8 mx-auto" />
+# `https://dejavue.fm`
 
 </div>
 
