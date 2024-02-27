@@ -235,90 +235,492 @@ layout: intro
 
 
 ---
+layout: intro
+---
 
-# Serializing State from Server to Client
+# Okay... But how can that *fail*?
 
-`example.com/_payload.json`
+<VClicks>
 
-```json
-[
-  { "data": 1, "prerenderedAt": 209 },
-  ["Reactive", 2],
-  {
-    "latest-articles": 3,
-    "latest-speaking": 74,
-    "latest-workshops": 166
-  },
-  [4, 26, 43, 58],
-  {
-    "_path": 5,
-    "_dir": 6,
-    "_draft": 7,
-    "_partial": 7,
-    "_locale": 8,
-    "title": 9,
-  },
-  1708189751754
-]
+## <span class="underline">Different state</span> on the server and on the client
+
+</VClicks>
+
+---
+
+# Invalid HTML
+
+---
+
+# Invalid HTML
+
+````md magic-move
+```html
+<p>
+ <div>some words</div>
+</p>
+```
+```html
+<p>
+ some words
+</p>
+```
+````
+
+<VClicks at="1">
+
+* Invalid HTML will be fixed by the browser but is sent "as is" by the server
+* This leads to different DOM trees and thus different hydration results
+* **Solution:** **Validate your HTML**, e.g. with `@nuxtjs/html-validator`
+
+</VClicks>
+
+---
+
+# Scripts manipulating your HTML
+
+---
+
+# Scripts manipulating your HTML
+
+In the rendered HTML
+
+````md magic-move
+```html
+<span class="relative z-20">
+  <!--[-->
+  View all talks
+  <!--]-->
+</span>
+```
+```html
+<span class="relative z-20">
+  View all talks
+</span>
+```
+````
+
+<VClicks at="1">
+
+* Scripts that manipulate the final rendered HTML can cause problems
+* This can be various optimization scripts, e.g. Cloudflare's optimization scripts
+* Removing placeholder comments will lead to hydration issues...
+* ...because the client can't match the server's HTML anymore
+* **Solution:** **Disable these scripts**
+
+</VClicks>
+
+---
+
+# Different data on the server and client
+
+````md magic-move
+```ts
+// In the script part of a Vue component (Nuxt app)
+const value = ref(Math.random())
+```
+```ts
+// In the script part of a Vue component (Nuxt app)
+const value = ref(Math.random())
+```
+```ts
+// In the script part of a Vue component (Nuxt app)
+const value = ref(Math.random())
+```
+```ts
+// In the script part of a Vue component (Nuxt app)
+const value = useState('unique-key', Math.random())
+```
+````
+
+<VClicks at="1">
+
+* Different data on the server and client will lead to hydration mismatches
+* Especially when using `Date`, `Math.random()` or other varying values, this can happen
+* **Solution:** **Transfer these values to the server**
+
+</VClicks>
+
+---
+
+# `import.meta.client` (e.g. with auth check)
+
+---
+
+# `import.meta.client` (e.g. with auth check)
+
+```vue
+<script setup>
+const isLoggedIn = ref(false)
+if(import.meta.client) {
+  isLoggedIn.value = true // imagine some auth check here
+}
+</script>
+
+<template>
+  <div v-if="isLoggedIn">
+    <h1>You are in!</h1>
+  </div>
+  <div v-else>
+    <h1>Please log in</h1>
+  </div>
+</template>
 ```
 
+<VClicks at="1">
+
+* Changing state in `import.meta.client` can cause hydration errors
+* It essentially changes the values the "client expects" from the server
+* **Solution:** **Execute client-only code in `onBeforeMount` or `onMounted`**
+
+</VClicks>
 ---
 
-TODO FROM HERE
+# Various other cases
 
-* What is hydration?
+<VClicks>
 
-* How can it mismatch => * Different data fetching on client and server
-  * Invalid HTML
-  * Scripts manipulating your HTML (e.g. removing placeholder comments)
-  * Calculating values based on changing data (think of `Date` or `Random`) on client and server separately
-  * Authentication state
+* This is not an exhaustive list
+* There are many other cases that can lead to hydration mismatches
+* Eventually, you can debug them though!
 
-* Can we avoid hydration?
-  * No JavaScript
-  * Infer data from markup
-    * Won't work for complex scenarios
-  * First of all, we can delay it (progressive/lazy hydration)
-    * But does this always help? 
-    * Faster initial load but almost guaranteed waiting time on click
-  * Ideally, we also only decide what to hydrate (partial hydration)
-  * Island Architecture (e.g. with Astro) to only hydrate what needs to be interactive
-    * Especially good with static, content-heavy sites
-  * Nuxt Server Components -> Julien's talk later
-
-* Vue 3.4 improved hydration messages + option to check them also in production
-* vue-bind-once (https://github.com/danielroe/vue-bind-once)
-* Upcoming: Vue-based useId composable planned for v3.5 (https://twitter.com/youyuxi/status/1745379112456429688)
-* Upcoming: Mismatched hook (https://github.com/vuejs/core/pull/8389)
-* And more to come in future Vue (and also Nuxt) versions
-
-What to recommend:
-
-* https://github.com/harlan-zw/nuxt-delay-hydration
-* https://github.com/huang-julien/nuxt-hydration
-* https://github.com/nuxt-modules/html-validator
-* Error Logging and Tracking through a service of your choice
-
+</VClicks>
 
 ---
+
+# Debugging hydration mismatches
+
+<img class="mb-8" src="/hydration/better-error-message.png" />
+
+<VClicks depth="2">
+
+* Vue 3.4 improved hydration messages
+* You can check them in production via `__VUE_PROD_HYDRATION_MISMATCH_DETAILS__` compile-time flag (or `debug: true` in Nuxt)
+* Also Julien's `nuxt-hydration` module can help you with that
+
+
+</VClicks>
+
+<!-- TODO: Screenshot hydration module -->
 
 ---
 layout: intro
-preload: false
 ---
 
-<h1 v-motion :initial="{ y: 0 }" :enter="{ y: -500, transition: { duration: 750, delay: 250 } }" class="mt-12 flex justify-center items-center">
+# Can we avoid hydration?
 
-<logos-vue class="text-8xl"/>
-<mdi-heart class="text-red-500 text-8xl" />
+---
 
-</h1>
+# Can we avoid hydration?
+
+<VClicks depth="2">
+
+* Yes - by not including JavaScript at all!
+  * e.g. via `experimentalNoScripts` route rule in Nuxt
+  * Problem: No interactivity 😫. If JS is needed, you need to write it vanilla.
+* You could try inferring data from markup (not easily possible)
+  * This won't work for complex scenarios though
+* But you can two things: Decide **what** should be hydrated and **when**!
+
+</VClicks>
+
+---
+
+# **What** to hydrate (Partial Hydration)
+
+<VClicks depth="2">
+
+* e.g. possible via **Island Architecture** (with Astro or îles)
+* Idea: Only hydrate what needs to be interactive
+* Especially good with static, content-heavy sites
+
+</VClicks>
+
+<!-- TODO: Graphic -->
+
+---
+
+# **When** to hydrate (Progressive/Lazy Hydration)
+
+<VClicks depth="2">
+
+* Idea: Delay hydration to a later point
+  * e.g. on scroll, on click or on browser idle
+* This improves the initial load time
+* If not being careful, this can lead to a waiting time on click though (bad _INP_)
+* Can be done via Harlan's `nuxt-delay-hydration` module
+
+</VClicks>
+
+---
+
+# What if...
+
+<VClicks>
+
+* We could render components on the server only...
+* Wouldn't need hydration for them...
+* They could still be "interactive"...
+* And could also render client-side components?
+
+</VClicks>
+
+---
+layout: intro
+---
+
+# Nuxt Server Components - "Reversed Islands"
+
+<VClicks>
+
+## Watch Julien Huang's talk later
+
+</VClicks>
+
+---
+layout: intro
+---
+
+# What's next in terms of hydration and Vue.js?
+
+---
+
+# What's next in terms of hydration and Vue.js?
+
+<VClicks>
+
+* `useId` composable in Vue 3.5
+  * Already available in Nuxt to fill the gap
+  * Why? To provide unique ids, e.g. for accessibility attributes like `aria-labelledby`
+* A hook to react when mismatches happen (https://github.com/vuejs/core/pull/8389)
+* More improvements with regards to lazy hydration, ssr-only etc. etc. in future Vue versions possible
+* Let's see what Vapor Mode will bring 👀
+
+</VClicks>
+
+---
+
+# Recommendations for a better hydration experience with Vue + Nuxt
+
+<VClicks>
+
+* `nuxt-delay-hydration` until native support
+* `nuxt-hydration` to debug hydration mismatches
+* `@nuxtjs/html-validator` to ensure your HTML is valid
+* Error Logging and Tracking through a service of your choice
+
+</VClicks>
+
 
 ---
 
 # Summary
 
-TODO
+<VClicks depth="2">
+
+* Hydration is necessary when using Vue + SSR
+* Hydration mismatches can happen due to various reasons...
+  * ...but they can be debugged and fixed easier now
+* Hydration experience can be improved with modules and server components
+* Future Hydration improvements are planned!
+
+</VClicks>
+
+---
+layout: intro
+---
+
+# <span class="water-font water-font-first">Hydration Demystified</span><span class="water-font water-font-second" aria-hidden>Hydration Demystified</span>
+
+# <mdi-check class="text-green-500 mt-32 invisible" />
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
+  h1 {
+    @apply relative w-full !text-7xl !mt-0 !mb-0; 
+  }
+
+.water-font {
+	font-family: "Poppins", sans-serif;
+	transform: translate(-50%, -50%);
+
+  @apply text-white absolute w-full;
+}
+
+.water-font-first {
+  @apply text-transparent;
+	-webkit-text-stroke: 1px #03a9f4;
+}
+
+.water-font-second {
+	color: #03a9f4;
+	animation: animate 4s ease-in-out infinite;
+}
+
+@keyframes animate {
+	0%,
+	100% {
+		clip-path: polygon(
+			0% 45%,
+			16% 44%,
+			33% 50%,
+			54% 60%,
+			70% 61%,
+			84% 59%,
+			100% 52%,
+			100% 100%,
+			0% 100%
+		);
+	}
+
+	50% {
+		clip-path: polygon(
+			0% 60%,
+			15% 65%,
+			34% 66%,
+			51% 62%,
+			67% 50%,
+			84% 45%,
+			100% 46%,
+			100% 100%,
+			0% 100%
+		);
+	}
+}
+</style>
+
+
+---
+layout: intro
+---
+
+# <span class="water-font water-font-first">Hydration Demystified</span><span class="water-font water-font-second" aria-hidden>Hydration Demystified</span>
+
+# <mdi-check class="text-green-500 mt-32" />
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
+  h1 {
+    @apply relative w-full !text-7xl !mt-0 !mb-0;
+  }
+
+  h2 {
+    @apply !text-4xl;
+  }
+
+  h3 {
+    @apply !text-2xl;
+  }
+
+.water-font {
+	font-family: "Poppins", sans-serif;
+	transform: translate(-50%, -50%);
+
+  @apply text-white absolute w-full;
+}
+
+.water-font-first {
+  @apply text-transparent;
+	-webkit-text-stroke: 1px #03a9f4;
+}
+
+.water-font-second {
+	color: #03a9f4;
+}
+</style>
+
+---
+layout: intro
+---
+
+# One more thing...
+
+
+<div class="justify-around flex">
+<VClicks>
+
+<div>
+<img src="https://michaelnthiessen.com/profile.jpg" alt="Michael Thiessen" class="rounded-full w-32 h-32 mx-auto" />
+<h2 class="mt-4">Michael Thiessen</h2>
+</div>
+
+<div>
+<img src="https://lichter.io/img/me@2x.jpg" alt="Alexander Lichter" class="rounded-full w-32 h-32 mx-auto" />
+<h2 class="mt-4">Alexander Lichter</h2>
+</div>
+
+</VClicks>
+</div>
+
+
+---
+preload: false
+---
+
+<div class="justify-center items-center flex w-full h-full">
+  <div class="luminance py-4">
+  DejaVue
+  </div>
+</div>
+
+<style>
+.luminance {
+   background: 50% 100% / 50% 50% no-repeat
+              radial-gradient(ellipse at bottom, #fff, transparent, transparent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 10vw;
+  font-family: "Source Sans Pro", sans-serif;
+  animation: reveal 3000ms ease-in-out forwards 200ms,
+             glow 2500ms linear infinite 2000ms;
+
+  @keyframes reveal {
+    80%{
+      letter-spacing: 8px;
+    }
+    100% {
+      background-size: 300% 300%;
+    }
+  }
+  @keyframes glow {
+    40% {
+      text-shadow: 0 0 8px #fff;
+    }
+  }
+}
+</style>
+
+---
+layout: intro
+---
+
+<div class="justify-center items-center">
+<div class="font-src text-6xl py-4" style="text-shadow: 0 0 200px #fff;">DejaVue</div>
+
+## March 2024
+
+# `https://dejavue.fm` 
+
+<Qrcode url="https://dejavue.fm" class="mt-8 mx-auto" />
+
+</div>
+
+<style>
+h1 {
+  @apply !text-4xl !mt-16;
+}
+
+h2 {
+  @apply !text-xl;
+}
+
+.font-src {
+  font-family: "Source Sans Pro", sans-serif;
+}
+</style>
 
 ---
 layout: intro
