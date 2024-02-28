@@ -323,19 +323,26 @@ In the rendered HTML
 ````md magic-move
 ```ts
 // In the script part of a Vue component (Nuxt app)
-const value = ref(Math.random())
+const randomNumber = ref(Math.random())
 ```
 ```ts
 // In the script part of a Vue component (Nuxt app)
-const value = ref(Math.random())
+const randomNumber = ref(Math.random())
 ```
 ```ts
 // In the script part of a Vue component (Nuxt app)
-const value = ref(Math.random())
+const randomNumber = ref(Math.random())
 ```
 ```ts
 // In the script part of a Vue component (Nuxt app)
-const value = useState('unique-key', () => Math.random())
+const randomNumber = useState('unique-key', () => Math.random())
+```
+```ts
+// In the script part of a Vue component (Nuxt app)
+const randomNumber = ref(null)
+onMounted(() => {
+  randomNumber.value = Math.random()
+}
 ```
 ````
 
@@ -344,6 +351,7 @@ const value = useState('unique-key', () => Math.random())
 * Different data on the server and client will lead to hydration mismatches
 * Especially when using `Date`, `Math.random()` or other varying values, this can happen
 * **Solution:** **Transfer these values to the server**
+* **Solution 2:** **Set them only on the client!**
 
 </VClicks>
 
@@ -355,6 +363,7 @@ const value = useState('unique-key', () => Math.random())
 
 # `import.meta.client` (e.g. with auth check)
 
+````md magic-move
 ```vue
 <script setup>
 const isLoggedIn = ref(false)
@@ -372,6 +381,58 @@ if(import.meta.client) {
   </div>
 </template>
 ```
+```vue
+<script setup>
+const isLoggedIn = ref(false)
+if(import.meta.client) {
+  isLoggedIn.value = true // imagine some auth check here
+}
+</script>
+
+<template>
+  <div v-if="isLoggedIn">
+    <h1>You are in!</h1>
+  </div>
+  <div v-else>
+    <h1>Please log in</h1>
+  </div>
+</template>
+```
+```vue
+<script setup>
+const isLoggedIn = ref(false)
+if(import.meta.client) {
+  isLoggedIn.value = true // imagine some auth check here
+}
+</script>
+
+<template>
+  <div v-if="isLoggedIn">
+    <h1>You are in!</h1>
+  </div>
+  <div v-else>
+    <h1>Please log in</h1>
+  </div>
+</template>
+```
+```vue
+<script setup>
+const isLoggedIn = ref(false)
+onMounted(() => {
+  isLoggedIn.value = true // imagine some auth check here
+})
+</script>
+
+<template>
+  <div v-if="isLoggedIn">
+    <h1>You are in!</h1>
+  </div>
+  <div v-else>
+    <h1>Please log in</h1>
+  </div>
+</template>
+```
+````
 
 <VClicks at="1">
 
@@ -404,10 +465,17 @@ if(import.meta.client) {
 * You can check them in production via `__VUE_PROD_HYDRATION_MISMATCH_DETAILS__` compile-time flag (or `debug: true` in Nuxt)
 * Also Julien's `nuxt-hydration` module can help you with that
 
-
 </VClicks>
 
-<!-- TODO: Screenshot hydration module -->
+<img src="/nuxt-hydration.jpg" v-click />
+
+---
+
+# `nuxt-hydration` module
+
+<img class="mt-16" src="/nuxt-hydration.jpg" />
+<img class="mt-16" src="/nuxt-hydration-modal.jpg" v-click />
+
 
 ---
 layout: intro
