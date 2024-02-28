@@ -866,7 +866,7 @@ hideLogoInCorner: true
 
 # Slides / Repo
 
-* Slides: [https://lichter.link/vueams-24/](https://lichter.link/vueams-24/)
+* Slides: [https://lichter.link/vue-ams-24/](https://lichter.link/vue-ams-24/)
 
 <div class="flex mx-32 justify-around">
 
