@@ -10,6 +10,12 @@ layout: intro
 transition: fade
 ---
 
+<!--
+
+What do you see?
+Nothing - empty - as your console should look like
+
+-->
 ---
 
 <div class="h-full flex justify-center items-center">
@@ -452,6 +458,12 @@ onMounted(() => {
 * Eventually, you can debug them though!
 
 </VClicks>
+
+---
+
+# Debugging hydration mismatches
+
+<img class="h-90 mx-auto" src="/what-to-do-screenshot.jpg">
 
 ---
 
