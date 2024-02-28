@@ -800,7 +800,7 @@ layout: intro
 
 ## March 2024
 
-<Qrcode url="https://dejavue.fm?ref=vueams-24" class="mt-8 mx-auto" />
+<Qrcode url="https://dejavue.fm?ref=vue-ams-24" class="mt-8 mx-auto" />
 
 # `https://dejavue.fm`
 
@@ -879,7 +879,7 @@ hideLogoInCorner: true
 </template>
 </LightOrDark>
 
-<Qrcode url="https://lichter.link/vueams-24/" class="mt-8 mx-auto" note="Slides" />
+<Qrcode url="https://lichter.link/vue-ams-24/" class="mt-8 mx-auto" note="Slides" />
 
 </div>
 
