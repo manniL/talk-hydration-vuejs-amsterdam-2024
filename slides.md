@@ -431,18 +431,28 @@ layout: intro
 </VClicks>
 
 ---
+layout: two-cols
+heading: What to hydrate (Partial Hydration)
+---
 
-# **What** to hydrate (Partial Hydration)
+<template #default>
 
 <VClicks depth="2">
 
-* e.g. possible via **Island Architecture** (with Astro or îles)
+* e.g. possible via **Island Architecture**
+  * with Astro
+  * or îles
 * Idea: Only hydrate what needs to be interactive
 * Especially good with static, content-heavy sites
 
 </VClicks>
 
-<!-- TODO: Graphic -->
+</template>
+<template #right>
+
+<PartialHydration class="w-full h-90 mt-8" v-click />
+
+</template>
 
 ---
 
